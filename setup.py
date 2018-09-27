@@ -22,7 +22,7 @@ def out(interface):
     mac_address_changer = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", mac_address)
     return(mac_address_changer.group(0))
 options=argument()
-mac_add=mac_changer(options.interface,options.mac_new)
+mac_changer(options.interface,options.mac_new)
 current_mac=out(options.interface)
 print(options.interface)
 if options.mac_new==current_mac:
