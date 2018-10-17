@@ -1,36 +1,34 @@
-#! /usr/bin/env python
+#! usr/bin/env python
+import argparse
 import subprocess
-import optparse
 import re
-def argument():
-    parser =optparse.OptionParser()
-    parser.add_option("-i","--interface",dest="interface",help="Interface to change its mac address")
-    parser.add_option("-m","--mac",dest="mac_new",help="New_mac")
-    (options,arguments)=parser.parse_args()
+
+def  argument():
+    parser=argparse.ArgumentParser()
+    parser.add_argument("-i","--interface",dest="interface",help="Interface to change the macaddress")
+    parser.add_argument("-m","--mac",dest="new_mac",help="New Mac address")
+    options=parser.parse_args()
     if not options.interface:
-        parser.error("please specify the interface")
-    elif not options.mac_new:
-        parser.error("please specify the mac address")
+        parser.error("Please specify the Interface")
+    elif not options.new_mac:
+        parser.error("Please specify the mac-address")
     return(options)
-
-def mac_changer(interface,mac_new):
-   subprocess.call(["ifconfig" ,  interface  ,  "down"])
-   subprocess.call(["ifconfig" ,  interface  ,  "hw" ,  "ether" ,  mac_new])
-   subprocess.call(["ifconfig" ,  interface  ,  "up"])
-def out(interface):
-    mac_address = subprocess.check_output(["ifconfig", interface])
-    mac_address_changer = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", mac_address)
-    return(mac_address_changer.group(0))
+def run_command(interface,new_mac):
+    subprocess.call(["ifconfig" , interface , "down"])
+    subprocess.call(["ifconfig" , interface , "hw" , "ether", new_mac])
+    subprocess.call(["ifconfig" , interface , "up"])
+def check_result(interface):
+    result=subprocess.check_output(["ifconfig", interface])
+    check=re.search("\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", result.decode("utf-8"))
+    return(check.group(0))
 options=argument()
-mac_changer(options.interface,options.mac_new)
-current_mac=out(options.interface)
-print(options.interface)
-if options.mac_new==current_mac:
-         print("[+] operation is successful")
-         print(current_mac)
+run_command(options.interface,options.new_mac)
+check_value=check_result(options.interface)
+if check_value!=options.interface:
+    print("[+] new mac address :" + check_value)
+    print("task completed successfully")
 else:
-         print("[+] operation is not successful")
-
+    print("Some error occured")
 
 
 
