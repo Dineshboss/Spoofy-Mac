@@ -11,6 +11,7 @@ cd spoofy-mac
 
 python setup.py -i interface -m new_mac_address    or    python3 setup.py -i interface -m new_mac_address(compatible with both) 
 
+![](/images/demo1.png)
 
 
 
